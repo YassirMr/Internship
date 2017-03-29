@@ -1,4 +1,6 @@
-#This script gives a grading of the antennas taking as input the node number, and the transmission power, and an argument for general (which stands for a sum of the rssi and deviding by the number: global assessing) or individual which brings what antenna is better for every experiment.
+#This script gives a grading of the antennas taking as input the node number, and the transmission power, and 
+#an argument for general (which stands for a sum of the rssi and deviding by the number: global assessing) or
+#individual which brings what antenna is better for every experiment.
 
 from argparse import ArgumentParser
 import operator
