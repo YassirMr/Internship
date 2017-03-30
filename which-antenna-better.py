@@ -1,8 +1,7 @@
-#This script gives a grading of the antennas taking as input the node number, and the transmission power, and 
-#an argument for general (which stands for a sum of the rssi and deviding by the number: global assessing) or
-#individual which brings what antenna is better for every experiment.
+#This script gives a grading of the antennas taking as input the node number, and the transmission power, and an argument for general (which stands for a sum of the rssi and deviding by the number: global assessing) or individual which brings what antenna is better for every experiment.
 
 from argparse import ArgumentParser
+import matplotlib.pyplot as plt 
 import operator
 
 Tx = 1400  #transmission power
@@ -11,7 +10,10 @@ total_power_ant_all = 0
 total_power_ant0 = 0
 total_power_ant1 = 0
 total_power_ant2 = 0
-
+power_of_antenna_all = []
+power_of_antenna0 = []
+power_of_antenna1 = []
+power_of_antenna2 = []
 parser = ArgumentParser()
 parser.add_argument("-n", "--node", default=n, type=int,
                     help="specify the node number, default={}"
@@ -51,6 +53,32 @@ elif args.type=='p':
   result = ({'ant0':float(i[27:33]),'ant-all': float(i[20:26]) , 'ant2': float(i[41:47]), 'ant1' : float(i[34:40]) })
   sorted_p = sorted(result.items(), key=operator.itemgetter(1), reverse=True)
   print (sorted_p) #showing for each experiment which antenna was better 
+  power_of_antenna_all.append(float(i[20:26]))
+  power_of_antenna0.append(float(i[27:33]))
+  power_of_antenna1.append(float(i[34:40]))
+  power_of_antenna2.append(float(i[41:47]))
+
+#ploting the histogram for each antenna:
+plt.subplot(221)
+n, bins, patches = plt.hist(power_of_antenna_all, 10, normed=1, facecolor='blue', alpha=0.75)
+plt.title('Histogram of all antennas')
+
+plt.subplot(222)
+n, bins, patches = plt.hist(power_of_antenna0, 10, normed=1, facecolor='blue', alpha=0.75)
+plt.title('Histogram of antenna0')
+
+plt.subplot(223)
+n, bins, patches = plt.hist(power_of_antenna1, 10, normed=1, facecolor='blue', alpha=0.75)
+plt.title('Histogram of antenna1')
+
+plt.subplot(224)
+n, bins, patches = plt.hist(power_of_antenna2, 10, normed=1, facecolor='blue', alpha=0.75)
+plt.title('Histogram of antenna2')
+
+#plt.savefig('Histogramms.png')
+plt.show()
+
+
 
 
 
