@@ -33,8 +33,8 @@ for i in wanted_line:
 
 T = range(5,14)
 plt.plot(T, received_power, 'ro')
-plt.title('Node {} => Node {}'.format(args.node_s,args.node_r))
-plt.xlabel('Tranmission power')
-plt.ylabel('Received power')
-plt.show
-plt.savefig('test.png')
+plt.title('Node {} => Node {} using antenna {}'.format(args.node_s,args.node_r,args.antenna))
+plt.xlabel('Tranmission power (dBm)')
+plt.ylabel('Received power (dBm)')
+plt.show()
+#plt.savefig('n{} to n{}.png'.format(n_s,n_r))
