@@ -67,4 +67,4 @@ text = ["{}".format(lines[4]), "{}".format(lines[9]),"{}".format(lines[14]),"","
 D = [data, trace]
 
 fig = go.Figure(data=D)
-py.plot(fig, filename="node{} sender, ant={}, T={}".format(args.node,args.antenna,args.power))
+py.plot(fig, filename="node{} sender, ant={}, T={} dBm".format(args.node,args.antenna,int(args.power/100)))
