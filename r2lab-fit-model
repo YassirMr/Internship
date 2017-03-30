@@ -1,6 +1,5 @@
-#This script is about plotting how the rssi decreases with the distance, we will do it for the lab with real distances
-#and display other power decrease models along, then see which model best suits the lab. 
-#Models considered: log distance path loss, two-ray model, usual telecom equation  
+#This script is about plotting how the rssi decreases with the distance, we will do it for the lab with real distances and display other power decrease models along, then see which model best suits the lab. 
+#Models considered: log distance model , two-ray model, telecom equation model , hata model
 
 #plotting the signal decrease, n4 sender and the others in the same row receivers.
 from argparse import ArgumentParser
@@ -18,6 +17,7 @@ gaindict = {'all' : 9, 'ant0' : 3, 'ant1': 3, 'ant2': 3 } #the value is gain ant
 R_Tequation = []
 R_logdistance = []
 R_2ray = []
+R_hata = []
 parser = ArgumentParser()
 parser.add_argument("-Tx", "--power", default=Tx, type=int,
                     help="specify a transmission power, default={}"
@@ -70,6 +70,13 @@ plt.plot(row_distance, R_logdistance, 'b^',label="log distance")
 for i in row_distance:
  R_Tequation.append(int(args.power/100)+gaindict[args.antenna]+gaindict[args.antenna]-(35.45+20*log10(2412)+20*log10(i/1000)))
 plt.plot(row_distance, R_Tequation, 'g^',label="Telecom equ")
+
+
+#ploting the hata model
+for i in row_distance:
+ c = 0.8+(1.1*log10(2412)-0.7)-1.56*log10(2412)
+ R_hata.append(int(args.power/100)-(69.55+26.16*log10(2412)-c+44.9*log10(i/1000)))
+plt.plot(row_distance, R_hata, 'mo',label="hata model")
 
 plt.legend(bbox_to_anchor=(0.8, 1), loc=2, borderaxespad=0.) #1.05
 #print(received_power)
