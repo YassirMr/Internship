@@ -9,7 +9,7 @@ py.sign_in('Tyassir', 'b1e2iknihbnk6p8mavP7')
 ant = 'all' #antenna taken
 Tx = 1400  #transmission power
 n = 1  #node number
-dict = {'all' : 20, 'ant0' : 27, 'ant1': 34, 'ant2': 41 }  #where to start reading values of rssi depending on the antenna wanted
+dict = {'all' : 2, 'ant0' : 3, 'ant1': 4, 'ant2': 5 }  #where to start reading values of rssi depending on the antenna wanted
  
 parser = ArgumentParser()
 parser.add_argument("-n", "--node", default=n, type=int,
@@ -24,22 +24,21 @@ parser.add_argument("-sr", "--way", default='s', choices=['s','r'],
                     help="specify if sender or receiver"
                          )
 args = parser.parse_args()
-l = []
+lines = []
 if args.way=='s':
   for d in range(1,38):
    file = "./trace-T{}-r1-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(args.power,d)  #local path
    fin = open(file , "r")
    wanted = fin.readlines()
-   l.append(wanted[args.node-1])     #read row number node-id, that contains the power received by all nodes 1..37 from the sending node (e.g. node 1 sends in  #the first line of each rssi file)
+   lines.append(wanted[args.node-1].split()[dict[args.antenna]])     #read row number node-id, that contains the power received by all nodes 1..37 from the sending node (e.g. node 1 sends in  #the first line of each rssi file)
 elif args.way=='r':
   file = "./trace-T{}-r1-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(args.power,args.node)
   fin=open(file , "r")
-  l =fin.readlines()       #read all rows in the rssi-id file that contains power received from all nodes
+  l =fin.readlines()     #read all rows in the rssi-id file that contains power received from all nodes
+  for line in l:
+   lines.append(line.split()[dict[args.antenna]])
 else:
- print('Please specify if sender of receiver')
-lines = []
-for i in l:
- lines.append(i[(dict[args.antenna]):((dict[args.antenna])+6)])       #where the power is found (e.g. value of antenna-all found in i[20:26])
+ print('Please specify if sender or receiver')
 
 
 if args.way=='s':  #replace the empty row with a useful information
