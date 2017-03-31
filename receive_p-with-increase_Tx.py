@@ -7,8 +7,8 @@ from argparse import ArgumentParser
 n_s = 2  #sender node
 n_r = 1  #receiver node
 ant = 'all' #antenna taken
-dict = {'all' : 20, 'ant0' : 27, 'ant1': 34, 'ant2': 41 }
-Tx = np.arange(500,1400,100)
+dict = {'all' : 2, 'ant0' : 3, 'ant1': 4, 'ant2': 5 }
+Tx = np.arange(500,1500,100)
 parser = ArgumentParser()
 parser.add_argument("-nr", "--node_r", default=n_r, type=int,
                     help="specify the receiver node, default={}"
@@ -21,17 +21,13 @@ parser.add_argument("-a", "--antenna", default=ant, choices=['all','ant0','ant1'
 args = parser.parse_args()
 
 received_power = []
-wanted_line = []
 for i in Tx:
- file = "./trace-T{}-r1-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(i,n_r)
+ file = "./trace-T{}-r1-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(i,args.node_r)
  fin = open(file , "r")
  lines = fin.readlines()
- wanted_line.append(lines[n_s-1])
+ received_power.append(lines[args.node_s-1].split()[dict[args.antenna]])
 
-for i in wanted_line:
- received_power.append(i[(dict[args.antenna]):((dict[args.antenna])+6)]) 
-
-T = range(5,14)
+T = range(5,15)
 plt.plot(T, received_power, 'ro')
 plt.title('Node {} => Node {} using antenna {}'.format(args.node_s,args.node_r,args.antenna))
 plt.xlabel('Tranmission power (dBm)')
