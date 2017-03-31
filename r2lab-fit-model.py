@@ -1,5 +1,11 @@
 #This script is about plotting how the rssi decreases with the distance, we will do it for the lab with real distances and display other power decrease models along, then see which model best suits the lab. 
 #Models considered: log distance model , two-ray model, telecom equation model , hata model
+'''links to wikipedia page to find the mathematical formula
+https://fr.wikipedia.org/wiki/%C3%89quation_des_t%C3%A9l%C3%A9communications
+https://en.wikipedia.org/wiki/Two-ray_ground-reflection_model
+https://en.wikipedia.org/wiki/Log-distance_path_loss_model
+https://en.wikipedia.org/wiki/Hata_Model
+'''
 
 #plotting the signal decrease, n4 sender and the others in the same row receivers.
 from argparse import ArgumentParser
@@ -12,7 +18,7 @@ Tx = 1400
 #T = 14
 row_nodes = [9,14,18,22,25,29,34,36]   # I took this row because it is the longest without any obstacle
 row_distance = np.arange(1.36,10.88,1.36)   #distance between the nodes, namely the x-axis of the plot
-dict = {'all' : 20, 'ant0' : 27, 'ant1': 34, 'ant2': 41 }
+dict = {'all' : 2, 'ant0' : 3, 'ant1': 4, 'ant2': 5 }
 gaindict = {'all' : 9, 'ant0' : 3, 'ant1': 3, 'ant2': 3 } #the value is gain antenna=5  cable loss= 2 
 R_Tequation = []
 R_logdistance = []
@@ -25,17 +31,14 @@ parser.add_argument("-Tx", "--power", default=Tx, type=int,
 parser.add_argument("-a", "--antenna", default=ant, choices=['all','ant0','ant1','ant2'],
                     help="specify which antenna, default={}".format(ant))
 args = parser.parse_args()
-power_l = []
 received_power = []
 
 for d in row_nodes:
  file = "./trace-T{}-r1-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(args.power,d)  #local path
  fin = open(file , "r")
  wanted = fin.readlines()
- power_l.append(wanted[3]) #4th row in each file 
+ received_power.append(wanted[3].split()[dict[args.antenna]]) #4th row in each file 
 
-for i in power_l:
- received_power.append(i[(dict[args.antenna]):((dict[args.antenna])+6)]) 
 
 plt.plot(row_distance, received_power, 'ro', label="r2lab")
 plt.title('Power decrease when node 4 is the sender Tx:{} dBm'.format(int(args.power/100)))
@@ -76,6 +79,7 @@ plt.plot(row_distance, R_Tequation, 'g^',label="Telecom equ")
 for i in row_distance:
  c = 0.8+(1.1*log10(2412)-0.7)-1.56*log10(2412)
  R_hata.append(int(args.power/100)-(69.55+26.16*log10(2412)-c+44.9*log10(i/1000)))
+#print(26.16*log10(2412)-c+44.9*log10(i/1000))
 plt.plot(row_distance, R_hata, 'mo',label="hata model")
 
 plt.legend(bbox_to_anchor=(0.8, 1), loc=2, borderaxespad=0.) #1.05
