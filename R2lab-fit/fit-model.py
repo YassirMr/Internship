@@ -27,7 +27,6 @@ gaindict = {'all' : 9, 'ant0' : 3, 'ant1': 3, 'ant2': 3 } #the value is gain ant
 R_Tequation = []
 R_logdistance = []
 R_2ray = []
-dicto = {2412:1 , 5180:6 }
 parser = ArgumentParser()
 parser.add_argument("-f", "--freq", default=F, type=int,
                     help="specify the frequency, default={}"
@@ -41,7 +40,7 @@ args = parser.parse_args()
 received_power = []
 
 for d in row_nodes:
- file = "./trace-freq{}-T{}-r{}-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(args.freq,args.power,dicto[args.freq],d)  #local path
+ file = "./trace-freq{}-T{}-r{}-a7-t1-i0.008-S64-N100/rssi-{}.txt".format(args.freq,args.power,6,d)  #local path
  fin = open(file , "r")
  wanted = fin.readlines()
  received_power.append(float(wanted[3].split()[dict[args.antenna]])) #4th row in each file 
