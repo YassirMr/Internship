@@ -1,0 +1,2 @@
+ping -W 9 -c 1000 -i 0.008 -s 64 -q 10.0.0.9 >& /tmp/ping.txt
+fit08 -> 10.0.0.9: 1000 packets transmitted, 1000 received, 0% packet loss, time 7988ms
